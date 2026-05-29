@@ -400,7 +400,19 @@ elif st.session_state.step == "end":
         csv_btn_label = "Download Results File (CSV)"
 
     df = pd.DataFrame(st.session_state.results)
-    st.dataframe(df[["Question_Index", "Question_Type", "Agreed_With_AI", "Is_Correct", "Response_Time_Sec"]])
+
+    # РАСШИФРОВКА МОДЕЛИ ИИ
+    condition_map = {
+        "PC": "Polite & Confident",
+        "PH": "Polite & Hesitant",
+        "BC": "Blunt & Confident",
+        "BH": "Blunt & Hesitant"
+    }
+    df['AI_Type'] = df['Condition'].map(condition_map)
+
+    # Вывод таблицы с понятным описанием ИИ
+    st.dataframe(
+        df[["Question_Index", "AI_Type", "Question_Type", "Agreed_With_AI", "Is_Correct", "Response_Time_Sec"]])
 
     csv_data = df.to_csv(index=False).encode('utf-8')
     st.download_button(
