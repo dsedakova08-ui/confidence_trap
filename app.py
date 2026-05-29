@@ -395,9 +395,9 @@ elif st.session_state.step == "manipulation_check":
             payload = df_new.to_dict(orient="records")
 
             # !!! ВСТАВЬТЕ ВАШ URL СЮДА !!!
-            WEBHOOK_URL = https://script.google.com/macros/s/AKfycbzNtIkGTMYzpFk0YjMXVYrC_NEyolspeYqBwIfs_NJwlUKhzXEOOo3_KTDOV7JWNx5M/exec
+            WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzNtIkGTMYzpFk0YjMXVYrC_NEyolspeYqBwIfs_NJwlUKhzXEOOo3_KTDOV7JWNx5M/exec"
 
-            if WEBHOOK_URL != https://script.google.com/macros/s/AKfycbzNtIkGTMYzpFk0YjMXVYrC_NEyolspeYqBwIfs_NJwlUKhzXEOOo3_KTDOV7JWNx5M/exec:
+            if WEBHOOK_URL != "https://script.google.com/macros/s/AKfycbzNtIkGTMYzpFk0YjMXVYrC_NEyolspeYqBwIfs_NJwlUKhzXEOOo3_KTDOV7JWNx5M/exec":
                 response = requests.post(WEBHOOK_URL, json=payload, timeout=10)
                 if response.status_code == 200:
                     # Уведомляем втихую или пишем в консоль разработчика
