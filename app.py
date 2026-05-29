@@ -2,6 +2,7 @@ import streamlit as st
 import time
 import random
 import pandas as pd
+import requests  # Добавлено для отправки данных в Google Таблицу
 
 # 1. НАСТРОЙКА СТРАНИЦЫ
 st.set_page_config(
@@ -378,6 +379,34 @@ elif st.session_state.step == "manipulation_check":
         for res in st.session_state.results:
             res["Rated_Politeness"] = polite_rating
             res["Rated_Confidence"] = confident_rating
+
+        # --- ОТПРАВКА ДАННЫХ В GOOGLE ТАБЛИЦУ ---
+        try:
+            df_new = pd.DataFrame(st.session_state.results)
+            condition_map = {
+                "PC": "Polite & Confident",
+                "PH": "Polite & Hesitant",
+                "BC": "Blunt & Confident",
+                "BH": "Blunt & Hesitant"
+            }
+            df_new['AI_Type'] = df_new['Condition'].map(condition_map)
+
+            # Превращаем результаты в JSON для отправки
+            payload = df_new.to_dict(orient="records")
+
+            # !!! ВСТАВЬТЕ ВАШ URL СЮДА !!!
+            WEBHOOK_URL = https://script.google.com/macros/s/AKfycbzNtIkGTMYzpFk0YjMXVYrC_NEyolspeYqBwIfs_NJwlUKhzXEOOo3_KTDOV7JWNx5M/exec
+
+            if WEBHOOK_URL != https://script.google.com/macros/s/AKfycbzNtIkGTMYzpFk0YjMXVYrC_NEyolspeYqBwIfs_NJwlUKhzXEOOo3_KTDOV7JWNx5M/exec:
+                response = requests.post(WEBHOOK_URL, json=payload, timeout=10)
+                if response.status_code == 200:
+                    # Уведомляем втихую или пишем в консоль разработчика
+                    print("Данные успешно улетели в Google Sheets!")
+                else:
+                    st.error("Ошибка при авто-сохранении данных.")
+        except Exception as e:
+            st.error(f"Не удалось подключиться к базе данных: {e}")
+        # ----------------------------------------
 
         st.session_state.step = "end"
         st.rerun()
