@@ -394,16 +394,16 @@ elif st.session_state.step == "manipulation_check":
             # Превращаем результаты в JSON для отправки
             payload = df_new.to_dict(orient="records")
 
-            # !!! ВСТАВЬТЕ ВАШ URL СЮДА !!!
+            # URL вашего Google Script (Раскомментирован и полностью исправлен)
             WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzNtIkGTMYzpFk0YjMXVYrC_NEyolspeYqBwIfs_NJwlUKhzXEOOo3_KTDOV7JWNx5M/exec"
 
-            if WEBHOOK_URL != "https://script.google.com/macros/s/AKfycbzNtIkGTMYzpFk0YjMXVYrC_NEyolspeYqBwIfs_NJwlUKhzXEOOo3_KTDOV7JWNx5M/exec":
-                response = requests.post(WEBHOOK_URL, json=payload, timeout=10)
-                if response.status_code == 200:
-                    # Уведомляем втихую или пишем в консоль разработчика
-                    print("Данные успешно улетели в Google Sheets!")
-                else:
-                    st.error("Ошибка при авто-сохранении данных.")
+            # Отправка данных на скрипт Google Таблицы
+            response = requests.post(WEBHOOK_URL, json=payload, timeout=10)
+            if response.status_code == 200:
+                print("Данные успешно улетели в Google Sheets!")
+            else:
+                st.error(f"Ошибка при авто-сохранении данных: статус {response.status_code}")
+
         except Exception as e:
             st.error(f"Не удалось подключиться к базе данных: {e}")
         # ----------------------------------------
